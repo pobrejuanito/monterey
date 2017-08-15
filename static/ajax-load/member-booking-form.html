@@ -1,0 +1,100 @@
+<div class="modal-header bg-theme-colored">
+  <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+  <h4 class="modal-title text-black" id="myModalLabel">Appointment Form</h4>
+</div>
+<div class="p-40">
+  <!-- Booking Form Starts -->
+  <form id="booking_form" name="booking_form" class="" action="/" method="post">
+    <input type='hidden' name='csrfmiddlewaretoken' value="" id="ajax_csrfmiddlewaretoken" />
+    <div class="row">
+      <div class="col-sm-12">
+        <div class="row">
+          <div class="col-sm-6">
+            <div class="form-group">
+              <label class="text-black"><strong>Appointment Date:</strong></label>
+              <input id="booking_arrival_date" type="text" placeholder="Arrival Date" class="form-control date-picker" name="booking_arrival_date" required>
+            </div>
+          </div>
+          <div class="col-sm-6">
+            <div class="form-group">
+              <labe class="text-black"l><strong>Time of Day:</strong></label>
+              <select id="booking_time" name="booking_time" class="form-control" required>
+                <option value="">-- select --</option>
+                <option>Morning</option>
+                <option>Afternoon</option>
+              </select>
+            </div>
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="text-black"><strong>Name:</strong></label>
+          <input type="text" placeholder="Enter Your Name" id="booking_guest_name" name="booking_guest_name" class="form-control" required>
+        </div>
+      </div>
+      <div class="col-sm-6">
+        <div class="form-group">
+          <label class="text-black"><strong>Email:</strong></label>
+          <input type="text" id="booking_email" placeholder="Enter Email" name="booking_email" class="form-control" required>
+        </div>
+      </div>
+      <div class="col-sm-6">
+        <div class="form-group">
+          <label class="text-black"><strong>Phone:</strong></label>
+          <input type="text" id="booking_phone" placeholder="Enter Phone" name="booking_phone" class="form-control" required>
+        </div>
+      </div>
+      <div class="col-sm-12">
+        <div class="form-group">
+          <label class="text-black"><strong>Comments:</strong></label>
+          <textarea id="booking_comments" name="booking_comments" class="form-control"></textarea>
+        </div>
+      </div>
+    </div>
+    <div class="form-group">
+      <input id="form_botcheck" name="form_botcheck" class="form-control" type="hidden" value="" />
+      <button type="submit" class="btn btn-dark btn-theme-colored btn-flat mr-5" data-loading-text="Please wait...">Booking Now</button>
+      <button type="reset" class="btn btn-default btn-flat btn-theme-colored">Reset</button>
+    </div>
+  </form>
+
+  <!-- Booking Form Validation-->
+  <script type="text/javascript">
+    $("#booking_form").validate({
+      submitHandler: function(form) {
+        $('#ajax_csrfmiddlewaretoken').val($('input[name=csrfmiddlewaretoken]').val())
+        console.log($('input[name=csrfmiddlewaretoken]').val());
+        var form_btn = $(form).find('button[type="submit"]');
+        var form_result_div = '#form-result';
+        $(form_result_div).remove();
+        form_btn.before('<div id="form-result" class="alert alert-success" role="alert" style="display: none;"></div>');
+        var form_btn_old_msg = form_btn.html();
+        form_btn.html(form_btn.prop('disabled', true).data("loading-text"));
+        $(form).ajaxSubmit({
+          dataType:  'json',
+          success: function(data) {
+            if( data.status == 'true' ) {
+              $(form).find('.form-control').val('');
+            }
+            form_btn.prop('disabled', false).html(form_btn_old_msg);
+            $('#booking_arrival_date').val('');
+            $('#booking_time').val('');
+            $('#booking_guest_name').val('');
+            $('#booking_email').val('');
+            $('#booking_phone').val('');
+            $('#booking_comments').val('');
+            $(form_result_div).html('Request Sent! We will contact your shortly.').fadeIn('slow');
+            setTimeout(function(){ $(form_result_div).fadeOut('slow') }, 6000);
+          }
+        });
+      }
+    });
+  </script>
+  <!-- Booking Form Ends -->
+</div>
+<div class="modal-footer">
+</div>
+<!-- Footer Scripts -->
+<script>
+  //reload date and time picker
+  THEMEMASCOT.initialize.TM_datePicker();
+</script>
