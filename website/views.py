@@ -11,16 +11,17 @@ def index(request):
 
     page_data = {}
     if request.method == 'POST':
-        message = 'Appointment Request' + "\n"
-        message += 'Name: ' + request.POST.get('booking_guest_name') + "\n"
-        message += 'Phone: ' + request.POST.get('booking_phone') + "\n"
-        message += 'Email: ' + request.POST.get('booking_email') + "\n"
-        message += 'Date: ' + request.POST.get('booking_arrival_date') + "\n"
-        message += 'Time: ' + request.POST.get('booking_time') + "\n"
-        message += 'Message: ' + request.POST.get('booking_comments') + "\n\n"
-        message += settings.EMAIL_SIGNATURE
-        send_mail(settings.EMAIL_APPOINTMENT_SUBJECT, message,  settings.EMAIL_TO, [settings.EMAIL_TO], fail_silently=False)
-        return JsonResponse({})
+       if request.POST.get('fax_number') == '':
+         message = 'Appointment Request' + "\n"
+         message += 'Name: ' + request.POST.get('booking_guest_name') + "\n"
+         message += 'Phone: ' + request.POST.get('booking_phone') + "\n"
+         message += 'Email: ' + request.POST.get('booking_email') + "\n"
+         message += 'Date: ' + request.POST.get('booking_arrival_date') + "\n"
+         message += 'Time: ' + request.POST.get('booking_time') + "\n"
+         message += 'Message: ' + request.POST.get('booking_comments') + "\n\n"
+         message += settings.EMAIL_SIGNATURE
+         send_mail(settings.EMAIL_APPOINTMENT_SUBJECT, message,  settings.EMAIL_TO, [settings.EMAIL_TO], fail_silently=False)
+         return JsonResponse({})
 
     page_data.update(csrf(request))
     return render_to_response('home.html', page_data)
@@ -28,13 +29,14 @@ def index(request):
 def sendmessage(request):
 
     if request.method == 'POST':
-        message = 'Message Details' + "\n"
-        message += 'Name: ' + request.POST.get('form_name') + "\n"
-        message += 'Phone: ' + request.POST.get('form_phone') + "\n"
-        message += 'Email: ' + request.POST.get('form_email') + "\n"
-        message += 'Message: ' + request.POST.get('form_message') + "\n\n"
-        message += settings.EMAIL_SIGNATURE
-        send_mail(settings.EMAIL_CONTACTUS_SUBJECT, message, settings.EMAIL_TO, [settings.EMAIL_TO], fail_silently=False)
+       if request.POST.get('fax_number') == '':
+         message = 'Message Details' + "\n"
+         message += 'Name: ' + request.POST.get('form_name') + "\n"
+         message += 'Phone: ' + request.POST.get('form_phone') + "\n"
+         message += 'Email: ' + request.POST.get('form_email') + "\n"
+         message += 'Message: ' + request.POST.get('form_message') + "\n\n"
+         message += settings.EMAIL_SIGNATURE
+         send_mail(settings.EMAIL_CONTACTUS_SUBJECT, message, settings.EMAIL_TO, [settings.EMAIL_TO], fail_silently=False)
     return JsonResponse({})
 
 def handler404(request):

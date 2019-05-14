@@ -7770,3 +7770,7 @@ blockquote p {
   height: 42px;
   margin-right: 10px;
 }
+
+.sfax {
+   display: none;
+}
