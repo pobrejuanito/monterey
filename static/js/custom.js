@@ -161,7 +161,7 @@ var THEMEMASCOT = THEMEMASCOT || {};
             var ajaxLoadContent = true;
             if( ajaxLoadContent ) {
                 $.ajax({
-                    url: "static/monterey/ajax-load/bootstrap-parent-modal.html",
+                    url: "/bootstrap-parent-modal/",
                     success: function (data) { $('body').append(data); },
                     dataType: 'html'
                 });

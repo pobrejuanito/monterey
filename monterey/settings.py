@@ -30,12 +30,14 @@ ALLOWED_HOSTS = ['*']
 # Application definition
 
 INSTALLED_APPS = (
-    'django.contrib.admin',
-    'django.contrib.auth',
-    'django.contrib.contenttypes',
-    'django.contrib.sessions',
-    'django.contrib.messages',
-    'django.contrib.staticfiles',
+   'django.contrib.admin',
+   'django.contrib.auth',
+   'django.contrib.contenttypes',
+   'django.contrib.sessions',
+   'django.contrib.messages',
+   'django.contrib.staticfiles',
+   'captcha',
+   'django.forms',
 )
 
 MIDDLEWARE_CLASSES = (
@@ -68,9 +70,18 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = 'monterey.wsgi.application'
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+    }
+}
 
-
-
+# CAPTCHA 
+CAPTCHA_LETTER_ROTATION = None
+CAPTCHA_FONT_SIZE = 28
+CAPTCHA_FOREGROUND_COLOR = '#000000'
+FORM_RENDERER = 'django.forms.renderers.TemplatesSetting'
 
 
 # Internationalization

@@ -94,11 +94,11 @@
                 <li><a href="#services">Services</a></li>
                 <li><a href="#gallery">Gallery</a></li>
                 <li><a href="#contact">Contact</a></li>
-                <li class="hidden-lg"><a  data-toggle="modal" data-target="#BSParentModal" href="{% static 'ajax-load/member-booking-form.html' %}">Book Now</a></li>
+                <li class="hidden-lg"><a  data-toggle="modal" data-target="#BSParentModal" href="/member-booking-form/">Book Now</a></li>
               </ul>
               <ul class="pull-right flip hidden-sm hidden-xs">
                 <li>
-                  <a class="btn btn-theme-colored mt-20 p-10 pl-20 pr-20 text-white btn-flat no-border" data-bg-color="#e6d8ad" data-toggle="modal" data-target="#BSParentModal" href="{% static 'ajax-load/member-booking-form.html' %}" class="bs-modal-ajax-load"><div style="color:#222222">Book Now</div></a>
+                  <a class="btn btn-theme-colored mt-20 p-10 pl-20 pr-20 text-white btn-flat no-border" data-bg-color="#e6d8ad" data-toggle="modal" data-target="#BSParentModal" href="/member-booking-form/" class="bs-modal-ajax-load"><div style="color:#222222">Book Now</div></a>
                 </li>
               </ul>
             </div>
@@ -663,10 +663,9 @@
                   <div class="col-sm-6">
                     <div class="form-group">
                       <textarea id="form_message" style="height: 108px;" name="form_message" class="form-control required" placeholder="Comment"></textarea>
-                     <p class="sfax">
-                        <label>Fax</label>
-                        <input type="text" name="fax_number">
-                     </p>
+                        <div style="color: #000000;">If you are human, enter the captcha letters in the text box
+                        {{ form }}
+                        </div>
                     </div>
                       <div class="form-group">
                         <input id="form_botcheck" name="form_botcheck" class="form-control" type="hidden" value="" />
@@ -688,16 +687,23 @@
                     $(form).ajaxSubmit({
                       dataType:  'json',
                       success: function(data) {
-                        if( data.status == 'true' ) {
-                          $(form).find('.form-control').val('');
-                        }
+                        console.log(data.status);
                         form_btn.prop('disabled', false).html(form_btn_old_msg);
-                        $('#form_name').val('');
-                        $('#form_email').val('');
-                        $('#form_phone').val('');
-                        $('#form_message').val('');
-                        $(form_result_div).html('Message Sent! We will contact your shortly.').fadeIn('slow');
-                        setTimeout(function(){ $(form_result_div).fadeOut('slow') }, 6000);
+ 
+                        if (data.status == 1) {
+                           $(form).find('.form-control').val('');                          
+                           $('#form_email').val('');
+                           $('#form_phone').val('');
+                           $('#form_message').val('');
+                           $('#contact_1').attr('value', '');
+                           $(form_result_div).html('Message Sent! We will contact your shortly.').fadeIn('slow');
+                           setTimeout(function(){ $(form_result_div).fadeOut('slow') }, 6000);
+                        } else {
+                           $('.captcha').attr('src',data.new_cptch_image);
+                           $('#contact_0').attr('value', data.new_cptch_key);
+                           $('#contact_1').attr('value', '');
+                           $(form_result_div).html('Invalid Capcha. Please try again').fadeIn('slow');
+                        }                        
                       }
                     });
                   }
